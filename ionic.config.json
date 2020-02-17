@@ -1,0 +1,7 @@
+{
+  "name": "DinosaurGame",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
