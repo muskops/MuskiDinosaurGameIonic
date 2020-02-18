@@ -1,10 +1,12 @@
+import { Thrash } from './thrash';
 import { environment } from './../../environments/environment.prod';
 import { TamañoPantallaService } from 'src/app/services/tamaño-pantalla.service';
-import { Unicorn } from './Unicorn';
+import { Skate } from './skate';
 import { Component,ElementRef, ViewChild } from '@angular/core';
 import { HostListener } from "@angular/core";
 
 declare var p5: any;
+declare var collided:any;
 
 export enum KEY_CODE {
   RIGHT_ARROW = 39,
@@ -22,13 +24,18 @@ export class HomePage {
   x: number;
   y: number;
   key = '';
-  unicorn;
+  backImage = new Image();
+  skate;
+  thrashes = [];
+  htmlStr: string;
   constructor() {
     this.getScreenSize();
   }
 
+
+
   saltar(){
-    this.unicorn.jump();
+    this.skate.jump();
   }
 
 @HostListener('window:resize', ['$event'])
@@ -43,7 +50,7 @@ getScreenSize(event?) {
   keyEvent(event: KeyboardEvent) { 
     this.key = event.key;
     if (event.keyCode === KEY_CODE.RIGHT_ARROW) {
-      this.unicorn.jump();
+      this.skate.jump();
     }
   }
 
@@ -51,16 +58,40 @@ getScreenSize(event?) {
   
   ngOnInit() {
     new p5(p => {
-      this.unicorn = new Unicorn(p,this.x,this.y);
+      this.skate = new Skate(p,this.x,this.y);
+      this.backImage = p.loadImage("../../assets/icon/back1.jpg");
       p.setup = () => {
         p.createCanvas(this.x, this.y);
       };
 
       p.draw = () => {
-        p.background(200);
-        this.unicorn.show();
-        this.unicorn.move();
+
+        if(p.random(1) < 0.01){
+          this.thrashes.push(new Thrash(p));
+        }
+        p.background(this.backImage);
+
+        for(let t of this.thrashes){
+          t.move();
+          t.show();
+          if(this.skate.hits(t)){
+            console.log("Game Over");
+            this.htmlStr = "PERDISTE";
+            p.noLoop();
+          }
+        }
+
+        this.skate.show();
+        this.skate.move();
+
+        
+
       };
     }, document.getElementById('divCanva'));
   }
+
+  restart(){
+    document.location.href = 'index.html';
+  }
+
 }

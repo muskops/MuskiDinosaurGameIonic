@@ -1,16 +1,21 @@
 <ion-header [translucent]="true">
     <ion-toolbar>
         <ion-title>
-            Blank
+            Skater Muski
         </ion-title>
+        <ion-button (click)="restart()">Reiniciar</ion-button>
     </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
     <div (touchstart)="saltar()" id="divCanva" width="100%" height="100%">
+        <div [innerHTML]="htmlStr">
+
+        </div>
     </div>
     <img src="../../assets/icon/Andre.png" id="muskii" style="display:none">
 </ion-content>
 
 <ion-footer>
+
 </ion-footer>
